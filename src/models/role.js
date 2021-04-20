@@ -19,7 +19,18 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   role.init({
-    name: DataTypes.STRING
+    name: {
+      allowNull:false,
+      type:DataTypes.STRING,
+    },
+    createdAt: {
+      allowNull: true,
+      type: DataTypes.DATE
+    },
+    updatedAt: {
+      allowNull: true,
+      type: DataTypes.DATE
+    }
   }, {
     sequelize,
     modelName: 'role',

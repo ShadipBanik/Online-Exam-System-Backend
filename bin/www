@@ -20,7 +20,7 @@ var models=require('../src/models')
  
  server.timeout = 240000;
  
-//  models.sequelize.sync().then(function() {
+//  models.sequelize.sync({force:true}).then(function() {
    server.listen(port, function() {
      console.log('Express server listening on port ' + server.address().port);
      });
