@@ -1,6 +1,5 @@
 const express = require('express');
 var models=require('../models');
-
 exports.alluserRole=(req,res)=>{
    models.role.findAll().then(docs=>{
        res.send({status:200,message:"Succcess",result:docs})})

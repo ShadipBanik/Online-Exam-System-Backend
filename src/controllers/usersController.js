@@ -1,5 +1,7 @@
 const express = require('express');
 var models = require('../models');
+const sendEmail=require('../middlewares/sendEmail');
+const jwt =require('jsonwebtoken');
 var bcrypt=require('bcrypt');
 exports.userGet = (req, res) => {
     models.users.findAll().then(docs => {
@@ -35,11 +37,29 @@ exports.userSave = async(req, res) => {
         if (rslt.length > 0 && toString(rslt.email) == toString(req.body.email)) {
             res.send({ status: 500, message: `${req.body.email} already exist!` })
         } else {
-            models.users.create(emp).then(result => {
-                res.send({ status: 200, message: "user add Sucessfull", result: result })
-            }).catch(err => {
-                res.send({ status: 500, message: "user add failled", error: err })
-            })
+           
+                const jwtToken=jwt.sign({
+                    username:req.body.firstname,
+                    email:req.body.email  
+                },process.env.JWT_SECRET,{expiresIn:'10h'} )
+                mailOption={
+                    to: req.body.email,
+                    subject:"Email verification", // Subject line
+                    text: "VERIFICATION", // plain text body
+                    html:`<p> Account activation link: ${process.env.CLIENT_URL}/activate/${jwtToken} <p>`
+                }
+                sendEmail.main(mailOption).then(rslt=>{
+                    models.users.create(emp).then(result => {
+                    res.send({status:200,message:"Please check your Email for verfication",result:result})
+                    })
+                    .catch(err => {
+                       res.send({ status: 500, message: "user add failled", error: err })
+                   })  
+                })
+                 .catch(err => {
+                    res.send({ status: 500, message: "user add failled", error: err })
+                })
+            
         }
     })
 

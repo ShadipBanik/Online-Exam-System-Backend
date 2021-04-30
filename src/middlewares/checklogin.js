@@ -6,9 +6,9 @@ const jwt = require("jsonwebtoken");
   try{
     const token=authorization.split(' ')[1];
     const decode=jwt.verify(token,process.env.JWT_SECRET);
-    const {username,userId}=decode;
+    const {username,email}=decode;
     req.username  = username;
-    req.userId=userId;
+    req.email=email ;
     next();
   }catch{
      next("Unauthorized! ")

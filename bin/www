@@ -13,7 +13,7 @@ var models=require('../src/models')
  * Get port from environment and store in Express.
  */
 
- var port = normalizePort(process.env.PORT || '3000');
+ var port = normalizePort(process.env.PORT || '4200');
  app.set('port', port);
  
  var server = http.createServer(app);

@@ -6,6 +6,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+const requestIp = require('request-ip');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -15,6 +16,9 @@ var model=require('./models/index')
 var app = express();
 dotenv.config();
 app.use(cors());
+app.set('trust proxy', 'loopback');
+app.use(requestIp.mw())
+
 //db connect
 const { coerce } = require('debug');
 
