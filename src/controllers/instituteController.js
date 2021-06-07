@@ -1,20 +1,20 @@
 const express = require('express');
 var models=require('../models');
-exports.alluserRole=async (req,res)=>{
+exports.allInstitute=async (req,res)=>{
     try{
-      await models.role.findAll().then(docs=>{
+      await models.institute.findAll().then(docs=>{
        res.send({status:200,message:"Succcess",result:docs})})
        .catch(err=> {
-        res.send({status:500,message:"unable to get all user roles",error:err});
+        res.send({status:500,message:"unable to get all institute",error:err});
     })
   }catch (err){
       console.log(err)
   } 
 };
-exports.roleGetById=(req,res)=>{
+exports.instituteGetById=(req,res)=>{
     if(!req.params.id)
     return res.status(400).send(`No record with given id:${id}`)
-    models.role.findAll({
+    models.institute.findAll({
         where:{
             id:req.params.id
         },
@@ -22,15 +22,15 @@ exports.roleGetById=(req,res)=>{
     }).then(docs=>{
         res.send({status:200,message:"Succcess",result:docs})})
         .catch(err=> {
-         res.send({status:500,message:"unable get user rol by ID`",error:err});
+         res.send({status:500,message:"unable get institute by ID`",error:err});
         })     
 };
-exports.roleSave=(req,res)=>{
+exports.instituteSave=(req,res)=>{
   var roleBody=new Object(req.body)
-   models.role.create(roleBody).then(result=>{
-       res.send({status:200,message:"user add Sucessfull",result:result})
+   models.institute.create(roleBody).then(result=>{
+       res.send({status:200,message:"institute add Sucessfull",result:result})
    }).catch(err=>{
-       res.send({status:500,message:"user add failled",error:err})
+       res.send({status:500,message:"institute add failled",error:err})
    })
 };
 

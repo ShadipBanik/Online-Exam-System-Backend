@@ -11,10 +11,15 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      // users.belongsTo(models.role,{
-      //   foreignKey:'id',
-      //   targetKey:'roleId'
-      // })
+      
+      users.belongsTo(models.role,{
+        as:'role',
+        foreignKey:'roleId',
+      })
+      users.belongsTo(models.institute,{
+        as:'institute',
+        foreignKey:'instituteId'
+      })
 
     }
   };
@@ -28,6 +33,7 @@ module.exports = (sequelize, DataTypes) => {
     country:{ allowNull:true,type:DataTypes.STRING},
     gender:{allowNull:true,type:DataTypes.STRING},
     status:{allowNull:false,type:DataTypes.STRING},
+    instituteId:{allowNull:true,type:DataTypes.INTEGER},
     roleId:{
       allowNull:false,
       type:DataTypes.INTEGER,

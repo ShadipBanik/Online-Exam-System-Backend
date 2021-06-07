@@ -31,6 +31,17 @@ module.exports = {
         onUpdate: "CASECADE"
 
       },
+      instituteId: {
+        allowNull: true,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'institute',
+          key: 'id'
+        },
+        onDelete: "CASCADE",
+        onUpdate: "CASECADE"
+
+      },
       createdAt: {
         allowNull: true,
         type: Sequelize.DATE,

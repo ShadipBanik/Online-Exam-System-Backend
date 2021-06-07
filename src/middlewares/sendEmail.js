@@ -1,3 +1,4 @@
+const { response } = require("express");
 const nodemailer = require("nodemailer");
 
 // async..await is not allowed in global scope, must use a wrapper
@@ -22,14 +23,11 @@ exports.main = async (req, res) => {
             html: req.html, // html body
         }
         
-        transporter.sendMail(mailOption, function (err, info) {
-            if (err) {
-                return err
-            } else {
-                return info.response;
-            }
-        })
-    } catch {
-         return 'somethong worng'
+      const response= await transporter.sendMail(mailOption)
+        console.log("reslt"+response);
+        return response
+    } catch (err){
+        console.log("eror"+err)
+         return err
     }
 }

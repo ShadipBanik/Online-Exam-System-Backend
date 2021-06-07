@@ -25,7 +25,7 @@ exports.userLogin = async (req, res) => {
                 email: user[0].email
             }, process.env.JWT_SECRET, { expiresIn: '10h' })
 
-            res.send({ status: 200, access_token: jwtToken, message: "Login Succesful!", user: { userEmail: user[0].email, role: user[0].roleId } })
+            res.send({ status: 200, access_token: jwtToken, message: "Login Succesful!", user: {username:user[0].firstname, userEmail: user[0].email, roleName: user[0].roleId } })
         } else {
             if (!loginAttemptUser.length > 0 && loginAttemptUser[0].loginAttemptCount == null) {
                 let loginAttempts = new Object({
@@ -53,7 +53,7 @@ exports.checkAttemptsLogin = async (req, res) => {
         const loginAttemptUser = await models.Login_activity.findAll({ where: { email: req.body.email } }).then(rslt => {
             return rslt
         })
-        if (loginAttemptUser && loginAttemptUser[0].loginAttemptCount == 3) {
+        if (loginAttemptUser.length>0 && loginAttemptUser[0].loginAttemptCount == 3) {
             let currentTime = new Date() - loginAttemptUser[0].lastRryDateTime;
             var min = Math.round(((currentTime % 86400000) % 3600000) / 60000);
             if (min > 10) {
@@ -150,7 +150,7 @@ exports.googleLogin = (req, res) => {
 
             if (user && user.length > 0) {
                 const jwtToken = jwt.sign({ username: user[0].firstname, email: user[0].email }, process.env.JWT_SECRET, { expiresIn: '10h' })
-                res.send({ status: 200, message: "Login Succesfully", access_token: jwtToken, user: { email: user[0].email, roleId: user[0].roleId } })
+                res.send({ status: 200, message: "Login Succesfully", access_token: jwtToken, user: {username:user[0].firstname ,email: user[0].email, roleId: user[0].roleId } })
             } else {
                 const password = given_name + process.env.JWT_SECRET + family_name;
                 const hasPassword = await bcrypt.hash(password, 10);
@@ -159,12 +159,12 @@ exports.googleLogin = (req, res) => {
                     lastname: family_name,
                     email: email,
                     password: hasPassword,
-                    roleId: 2,
+                    roleId: 1,
                     status: 'ACTIVATED',
                 });
                 models.users.create(newUser).then(docs => {
                     const jwtToken = jwt.sign({ username: docs.firstname, email: docs.email }, process.env.JWT_SECRET, { expiresIn: '10h' });
-                    res.send({ status: 200, message: "registration succesfull", access_token: jwtToken, user: { email: docs.email, roleId: docs.roleId } })
+                    res.send({ status: 200, message: "registration succesfull", access_token: jwtToken, user: {username:docs.firstname,email: docs.email, roleId: docs.roleId } })
                 }).catch(err => {
                     res.send({ status: 500, message: "registration not successful", error: err })
                 })
